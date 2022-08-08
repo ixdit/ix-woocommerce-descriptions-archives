@@ -1,0 +1,15 @@
+{
+    "name": "ix/woocomerce-description-archives",
+    "authors": [
+        {
+            "name": "ixdit",
+            "email": "dev@wp-laba.ru"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "classmap": [
+            "classes"
+        ]
+    }
+}
