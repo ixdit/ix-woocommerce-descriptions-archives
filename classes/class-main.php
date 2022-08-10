@@ -13,6 +13,7 @@ class Main {
 	public function init() {
 
 		( new Requirements() )->init();
+        ( new Register_Field() )->init();
 
 	}
 
