@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'IXWDA\\Main' => $baseDir . '/classes/class-main.php',
+    'IXWDA\\Output' => $baseDir . '/classes/class-output.php',
     'IXWDA\\Register_Field' => $baseDir . '/classes/class-register-field.php',
     'IXWDA\\Requirements' => $baseDir . '/classes/class-requirements.php',
 );

@@ -14,6 +14,7 @@ class Main {
 
 		( new Requirements() )->init();
         ( new Register_Field() )->init();
+        ( new Output() )->init();
 
 	}
 
