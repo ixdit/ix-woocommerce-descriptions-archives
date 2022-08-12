@@ -20,8 +20,6 @@ class Output {
 
 		include IXWDA_PLUGIN_DIR . '/view/html-output-tpl.php';
 
-//		echo esc_attr( get_term_meta( $obj->term_id, 'ix_archive_description', 1 ) );
-
 	}
 
 }
