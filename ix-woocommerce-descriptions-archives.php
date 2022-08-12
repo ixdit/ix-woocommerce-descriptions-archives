@@ -31,6 +31,8 @@ define( 'IXWDA_PLUGIN_NAME', 'Ix Woocommerce Descriptions Archives' );
 
 require IXWDA_PLUGIN_DIR . '/vendor/autoload.php';
 
+add_action( 'plugins_loaded', array( 'IXWDA\Main', 'init' ) );
 
-new IXWDA\Main();
+
+
 

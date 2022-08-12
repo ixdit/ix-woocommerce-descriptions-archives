@@ -2,6 +2,8 @@
 
 namespace IXWDA;
 
+use WC_Cache_Helper;
+
 class Register_Field {
 
 	/**
@@ -10,10 +12,12 @@ class Register_Field {
 	private array $tax_names;
 
 	public function __construct() {
+
 		$this->tax_names = [
 			'product_cat',
 			'product_tag',
 		];
+
 	}
 
 	public function init() {
@@ -25,8 +29,8 @@ class Register_Field {
 			add_action( "{$tax_name}_add_form_fields", [ $this, 'add_description_fields' ] );
 			add_action( "{$tax_name}_edit_form_fields", [ $this, 'add_description_fields' ] );
 
-			add_action( "create_{$tax_name}", [ $this, 'ix_save_description_field' ] );
-			add_action( "edited_{$tax_name}", [ $this, 'ix_save_description_field' ] );
+			add_action( "create_{$tax_name}", [ $this, 'save_description_field' ] );
+			add_action( "edited_{$tax_name}", [ $this, 'save_description_field' ] );
 
 		}
 
@@ -74,7 +78,7 @@ class Register_Field {
 		}
 	}
 
-	public function ix_save_description_field( $term_id ) {
+	public function save_description_field( $term_id ) {
 
 		if ( empty( $_POST['ix_archive_description'] ) ) {
 			delete_term_meta( $term_id, 'ix_archive_description' );
@@ -85,7 +89,15 @@ class Register_Field {
 
 	public function get_attributes() {
 
-		$raw_attribute_taxonomies = get_transient( 'description_field_atributes' );
+		$prefix      = WC_Cache_Helper::get_cache_prefix( 'ix-attributes' );
+		$cache_key   = $prefix . 'attributes';
+		$cache_value = wp_cache_get( $cache_key, 'ix-attributes' );
+
+		if ( false !== $cache_value ) {
+			return $cache_value;
+		}
+
+		$raw_attribute_taxonomies = get_transient( 'ix_description_field_atributes' );
 
 		if ( false === $raw_attribute_taxonomies ) {
 
@@ -98,10 +110,10 @@ class Register_Field {
                         ORDER BY attribute_name ASC;
                         ", ARRAY_A );
 
-			$raw_attribute_taxonomies = wp_list_pluck( $raw_attribute_taxonomies, 'attribute_name' );
-
-			set_transient( 'description_field_atributes', $raw_attribute_taxonomies );
+			set_transient( 'ix_description_field_atributes', $raw_attribute_taxonomies );
 		}
+
+		$raw_attribute_taxonomies = wp_list_pluck( (array) array_filter( $raw_attribute_taxonomies ), 'attribute_name' );
 
 		$tax_name = [];
 
@@ -110,6 +122,8 @@ class Register_Field {
 			$tax_name[] = 'pa_' . $attribute_taxonomy;
 
 		}
+
+		wp_cache_set( $cache_key, $tax_name, 'ix-attributes' );
 
 		return $tax_name;
 
